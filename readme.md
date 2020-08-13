@@ -8,6 +8,18 @@ Coming Soon
 The Local Setup is used as the the baseline, its a postgres running in docker on your local machine.
 
 ### To setup
+
+Setup your python environment (just a note Dataflow from google only supports Python 3.5)
+
+```bash
+pyenv virtualenv -f 3.5.9 venv
+pyenv activate venv
+
+pip install -r requirements.txt
+```
+
+
+
 Start a Postgres instance
 ```bash
 docker-compose -f docker/docker-compose.yaml up -d
