@@ -1,8 +1,7 @@
 import setuptools
 
 REQUIRED_PACKAGES = [
-    "apache-beam[gcp]",
-    "apache-beam==2.22.0",
+    "apache-beam==2.23.0",
     "beam-nuggets",
     "psycopg2-binary"
 ]

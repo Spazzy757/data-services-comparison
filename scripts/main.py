@@ -21,15 +21,18 @@ from beam_nuggets.io import relational_db
 
 def get_csv_reader(readable_file):
 
-    # Open a channel to read the file from GCS
-    gcs_file = beam.io.filesystems.FileSystems.open(readable_file)
-
     # Return the csv reader
-    return  csv.DictReader(io.TextIOWrapper(gcs_file))
+    import csv
+
+    with open('coors.csv', mode='r') as infile:
+        reader = csv.reader(infile)
+        mydict = {rows[0]:rows[1] for rows in reader}
+    return mydict
 
 
 def run(argv=None, save_main_session=True):
   """Main entry point; defines and runs the pipeline."""
+  logging.info("HERE")
   parser = argparse.ArgumentParser()
 
   parser.add_argument(
@@ -69,7 +72,7 @@ def run(argv=None, save_main_session=True):
   args, pipeline_args = parser.parse_known_args(argv)
 
   options = PipelineOptions(pipeline_args)
-
+  logging.info(pipeline_args)
   source_config = relational_db.SourceConfiguration(
     drivername='postgresql',
     host=args.database_host,

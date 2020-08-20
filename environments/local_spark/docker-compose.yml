@@ -1,0 +1,55 @@
+version: '3.4'
+volumes:
+  pg-data:
+services:
+  db:
+    image: postgres:12
+    restart: always
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+  beam_job_server:
+    image:  apache/beam_spark_job_server:latest
+    command: ["--spark-master-url=spark://spark:7077"]
+    network_mode: host
+    ports:
+    - 8099:8099
+  spark:
+    image: docker.io/bitnami/spark:3-debian-10
+    environment:
+      - SPARK_MODE=master
+      - SPARK_MASTER_HOST=0.0.0.0
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      - SPARK_MASTER_WEBUI_PORT=8080
+    ports:
+      - "7077:7070"
+      - '8080:8080'
+  spark-worker-1:
+    image: docker.io/bitnami/spark:3-debian-10
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+  spark-worker-2:
+    image: docker.io/bitnami/spark:3-debian-10
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no

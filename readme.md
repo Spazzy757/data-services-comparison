@@ -49,5 +49,4 @@ Requires a Google Cloud Subscription
 
 
 # Azure Setup
-
 # AWS Setup
