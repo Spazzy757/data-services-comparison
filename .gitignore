@@ -1,2 +1,6 @@
 env
 *.egg-info/
+charts/
+*.zip
+flink-1.10.1/
+credentials.*
